@@ -2,7 +2,7 @@ import argparse
 import torch
 import torch.optim as optim
 from src.model import DyAb
-from src.main_utils import save_model, get_device
+from src.main_utils import save_model, get_device, set_seed
 from src.train_utils import get_data_loader, step
 import wandb
 import uuid
@@ -20,8 +20,9 @@ def main():
     args = parser.parse_args()
 
     wandb.init(project="DyAb reboot")
-    
+    set_seed(args.seed)
     device = get_device('cuda')
+    
     model = DyAb(img_dim=args.img_dim, device=args.device).to(device)
     optimizer = optim.Adam(model.parameters(), lr=args.learning_rate)
     criterion = torch.nn.MSELoss()
